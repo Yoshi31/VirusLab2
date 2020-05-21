@@ -34,9 +34,9 @@ double securityCoefficient(int securityPercentage)
 double vaccineScreening(int developmentTime, int thisDay)
 {
 	if (developmentTime <= thisDay)
-		return 0.2;//èçîáðåëè âàêöèíó, íóæíî ñèëüíî óìåíüøèòü ñêîðîñòü ðàñïðîñòðàíåíè
+		return 0.2;//Ð¸Ð·Ð¾Ð±Ñ€ÐµÐ»Ð¸ Ð²Ð°ÐºÑ†Ð¸Ð½Ñƒ, Ð½ÑƒÐ¶Ð½Ð¾ ÑÐ¸Ð»ÑŒÐ½Ð¾ ÑƒÐ¼ÐµÐ½ÑŒÑˆÐ¸Ñ‚ÑŒ ÑÐºÐ¾Ñ€Ð¾ÑÑ‚ÑŒ Ñ€Ð°ÑÐ¿Ñ€Ð¾ÑÑ‚Ñ€Ð°Ð½ÐµÐ½Ð¸
 	else
-		return 1;//âàêöèíû íåò, âñå ïî ïðåæíåìó
+		return 1;//Ð²Ð°ÐºÑ†Ð¸Ð½Ñ‹ Ð½ÐµÑ‚, Ð²ÑÐµ Ð¿Ð¾ Ð¿Ñ€ÐµÐ¶Ð½ÐµÐ¼Ñƒ
 }
 
 int vaccineDevelopmentTime(int virusComplexity)
@@ -48,13 +48,13 @@ int vaccineDevelopmentTime(int virusComplexity)
 	case 3: return 90;
 	case 4: return 120;
 	default:
-		cout << "Âðåìÿ ðàçðàáîòêè âàêöèíû íå ìîæåò áûòü îïðåäåëåííî!!!" << endl;
+		cout << "Ð’Ñ€ÐµÐ¼Ñ Ñ€Ð°Ð·Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ¸ Ð²Ð°ÐºÑ†Ð¸Ð½Ñ‹ Ð½Ðµ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð½Ð¾!!!" << endl;
 		break;
 	}
 }
 
 double infectionRate(double startInvectionRate, double densityCoefficient, double securityCoefficient)
 {
-	double vaccineRatio = vaccineScreening(30, 20);//ïîñòîÿííî ïðîâåðÿåì íàëè÷èå âàêöèíû
+	double vaccineRatio = vaccineScreening(30, 20);//Ð¿Ð¾ÑÑ‚Ð¾ÑÐ½Ð½Ð¾ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ Ð²Ð°ÐºÑ†Ð¸Ð½Ñ‹
 	return startInvectionRate * densityCoefficient * securityCoefficient * vaccineRatio;
 }
