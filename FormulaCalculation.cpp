@@ -55,6 +55,67 @@ int vaccineDevelopmentTime(int virusComplexity)
 
 double infectionRate(double startInvectionRate, double densityCoefficient, double securityCoefficient)
 {
-	double vaccineRatio = vaccineScreening(30, 20);//постоянно проверяем наличие вакцины
-	return startInvectionRate * densityCoefficient * securityCoefficient * vaccineRatio;
+	return startInvectionRate * densityCoefficient * securityCoefficient;
+}
+
+double medicineCoefficient(int medicineLevel)
+{
+	switch (medicineLevel)
+	{
+	case 1: return 1.1;
+	case 2: return 1;
+	case 3: return 0.9;
+	case 4: return 0.8;
+	case 5: return 0.7;
+	default: cout << "Невозможно определить уровень медицины" << endl;
+		break;
+	}
+}
+
+double mortalityCoefficient(int startMortality, double medicineCoef)
+{
+	double mortalityTransfer = static_cast<double>(startMortality) / 100;//переводит из процентов в дробь
+	return mortalityTransfer * medicineCoef;
+}
+
+void basicCalculation(double infectionRate, int developmentTime, double mortalityCoefficient)
+{
+	cout << "Введите колличество дней для прогноза" << endl;
+	int predictDay;//спрашивает на сколько дней нужно сделать прогноз
+	cin >> predictDay;
+	int* recovered = new int[predictDay];//создаем динмачиный массив для выздоровевших людей
+	float infectedToday = 0;//стартовое кол-во зараженных
+	float deadToday=0;
+	float infectedAll=1;
+	float deadAll=0;
+	for (int today = 1; today <= predictDay; today++)//цикл должен работать столько, на сколько дней нужен прогноз
+	{
+		double vacineCheck = vaccineScreening(developmentTime, today);//каждый раз проверяем наличие вакцины
+		infectedToday = infectedAll * infectionRate * vacineCheck;
+		deadToday = infectedToday * mortalityCoefficient * vacineCheck;
+		recovered[today - 1] = infectedToday - deadToday;
+		if (today > 5)
+		{
+			infectedAll = infectedAll + infectedToday - deadToday-recovered[today-5];
+		}
+		else
+		{
+			infectedAll = infectedAll + infectedToday - deadToday;
+		}
+		deadAll = deadAll + deadToday;
+		/*numberOfInfected = numberOfInfected * infectionRate * vacineCheck;//подсчитывает кол-во зараженных сегодня
+		deadToday = numberOfInfected * mortalityCoefficient * vacineCheck;//умерших сегодня
+		deadAll =deadAll+ deadToday;
+		infectedAll = infectedAll+numberOfInfected;*/
+		cout << "День " << today << endl;
+		cout << "Сегодня зараженных: " << static_cast<int>(infectedToday) << endl;
+		cout << "Зараженных всего: " << static_cast<int>(infectedAll) << endl;
+		cout << "Сегодня погибло: " << static_cast<int>(deadToday) << endl;
+		cout << "Погибших всего: " << static_cast<int>(deadAll) << endl;
+		if(today>5)
+		cout << "Выздоровевших сегодня: " << recovered[today-5] << endl;
+		//numberOfInfected=numberOfInfected - deadToday;
+
+	}
+	delete[]recovered;
 }
