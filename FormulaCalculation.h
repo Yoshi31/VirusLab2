@@ -1,10 +1,12 @@
 #include <iostream>
 using namespace std;
-double infectionRate(double startInvectionRate, double densityCoefficient, double securityCoefficient);//РЅР°С…РѕРґРёРј СЃРєРѕСЂРѕСЃС‚СЊ Р·Р°СЂР°Р¶РµРЅРёСЏ Р±РµСЂРµРј СЃС‚Р°СЂС‚РѕРІСѓСЋ СЃРєРѕСЂРѕСЃС‚СЊ Рё СѓРјРЅРѕР¶Р°РµРј РЅР° РєРѕСЌС„ РїР»РѕС‚РЅРѕСЃС‚Рё, РЅР° РєРѕСЌС„ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё Рё РЅР° РєРѕСЌС„ РІР°РєС†РёРЅС‹
-double densityCoefficient(int strength);//РЅР°С…РѕРґРёРј РєРѕСЌС„РёС†РёРµРЅС‚ РїР»РѕС‚РЅРѕСЃС‚Рё РЅР°СЃРµР»РµРЅРёСЏ(РґРѕРїСѓСЃС‚РёРј 50000 С‡РµР»=0.7(С‚Р°Рє РєР°Рє РЅРёР·РєР°СЏ РїР»РѕС‚РЅРѕСЃС‚СЊ)РёР»Рё 10 РјР»РЅ С‡РµР»=1.4(С‚Р°Рє РєР°Рє РІС‹СЃРѕРєР°СЏ)
-double securityCoefficient(int securityPercentage);//РўСѓС‚ РјРѕР¶РЅРѕ Р»РёР±Рѕ СЃРїСЂР°С€РёРІР°С‚СЊ РІ РїСЂРѕС†РµРЅС‚Р°С… Рё СЃРґРµР»Р°С‚СЊ С„РѕСЂРјСѓР»Сѓ(1.05-%)Р»РёР±Рѕ СЃРїСЂРѕСЃРёС‚СЊ СѓСЂРѕРІРµРЅСЊ(1(РІСЃРµ РїР»РѕС…Рѕ)2(С‚РµСЂРїРёРјРѕ)3(РЅРѕСЂРј)4(С…РѕСЂРѕС€Рѕ)5(РѕС‚Р»РёС‡РЅРѕ)Рё РёСЃС…РѕРґСЏ РёР· СЌС‚РѕРіРѕ РїСЂРёСЃРІРѕРёС‚СЊ РєРѕСЌС„РёС†РёРµРЅС‚С‹
-double vaccineScreening(int developmentTime, int thisDay);//РїСЂРѕРІРµСЂСЏРµРј РµСЃС‚СЊ Р»Рё РІР°РєС†РёРЅР°, РµСЃР»Рё РµСЃС‚СЊ, С‚Рѕ РІС‹РІРѕРґРёРј 0.2, РµСЃР»Рё РЅРµС‚, С‚Рѕ 1
-int vaccineDevelopmentTime(int virusComplexity);//РїРѕР»СѓС‡Р°РµРј РёР· РєР»Р°СЃСЃР° СЃР»РѕР¶РЅРѕСЃС‚СЊ РІРёСЂСѓСЃР° Рё РѕРїСЂРµРґРµР»СЏРµРј СЃРєРѕР»СЊРєРѕ РІСЂРµРјРµРЅРё РїРѕРЅР°РґРѕР±РёС‚СЃСЏ РЅР° СЂР°Р·СЂР°Р±РѕС‚РєСѓ РІР°РєС†РёРЅС‹(РїРѕРїСѓР»СЏСЂРЅС‹Р№ РІРёСЂСѓСЃ=30 РґРЅРµР№, РІРёСЂСѓСЃ РІСЃС‚СЂРµС‡Р°Р»СЃСЏ СЂР°РЅСЊС€Рµ=60 РґРЅРµР№, РЅРµРёР·РІРµСЃС‚РЅС‹Р№ РІРёСЂСѓСЃ=90 РґРЅРµР№, РѕС‡РµРЅСЊ СЃР»РѕР¶РЅС‹Р№ РІРёСЂСѓСЃ=120 РґРЅРµР№
-double mortalityCoefficient(int startMortality, double medicineCoef);//РЅР°С…РѕРґРёРј РїСЂРѕС†РµРЅС‚ СЃРјРµСЂС‚РЅРѕСЃС‚Рё РёСЃС…РѕРґСЏ РёР· РЅР°С‡Р°Р»СЊРЅРѕР№ СЃРјРµСЂС‚РЅРѕСЃС‚Рё Рё РєРѕСЌС„ РјРµРґРёС†РёРЅС‹
-double medicineCoefficient(int medicineLevel);//РїРѕР»СѓС‡Р°РµРј С‡РёСЃР»Рѕ РёР· РєР»Р°СЃСЃР° Р·Р°СЂР°Р¶РµРЅРЅРѕРіРѕ РіРѕСЂРѕРґР° 1(РїР»РѕС…Рѕ),2(РЅРѕСЂРј),3(РѕС‚Р»РёС‡РЅРѕ)Рё РёСЃС…РѕРґСЏ РёР· Р·РЅР°С‡РµРЅРёСЏ РїСЂРёСЃРІР°РµРј РєРѕСЌС„
-void basicCalculation(double infectionRate, int developmentTime, double mortalityCoefficient);//РІРѕС‚ С‚СѓС‚ РІРѕРѕР±С‰Рµ С…Р· РєР°Рє СЌС‚Рѕ РєСЂР°СЃРёРІРѕ СЃРґРµР»Р°С‚СЊ...
+double infectionRate(double startInvectionRate, double densityCoefficient, double securityCoefficient);//находим скорость заражения берем стартовую скорость и умножаем на коэф плотности, на коэф безопасности и на коэф вакцины
+double immunityCoefficient(double deadAll, double infectedAll, double recoveredAll, int population);//те кто заболел или переболел вирусом не может больше заболеть, мы нвходим этот процент от всего населения
+double densityCoefficient(int strength);//находим коэфициент плотности населения(допустим 50000 чел=0.7(так как низкая плотность)или 10 млн чел=1.4(так как высокая)
+double securityCoefficient(int securityPercentage);//Тут можно либо спрашивать в процентах и сделать формулу(1.05-%)либо спросить уровень(1(все плохо)2(терпимо)3(норм)4(хорошо)5(отлично)и исходя из этого присвоить коэфициенты
+double vaccineScreening(int developmentTime, int thisDay);//проверяем есть ли вакцина, если есть, то выводим 0.2, если нет, то 1
+int vaccineDevelopmentTime(int virusComplexity);//получаем из класса сложность вируса и определяем сколько времени понадобится на разработку вакцины(популярный вирус=30 дней, вирус встречался раньше=60 дней, неизвестный вирус=90 дней, очень сложный вирус=120 дней
+double mortalityCoefficient(int startMortality, double medicineCoef);//находим процент смертности исходя из начальной смертности и коэф медицины
+double medicineCoefficient(int medicineLevel);//получаем число из класса зараженного города 1(плохо),2(норм),3(отлично)и исходя из значения присваем коэф
+double powerFactor(double infectionAll,double powerCoeficient, string nameVirus, string nameCity);//власти вводят меры со временем для предотвращения эпидемии
+void basicCalculation(double infectionRate, int developmentTime, double mortalityCoefficient, int population, int periodOfIllness, string nameVirus, string nameCity);//функция для основных расчетов
