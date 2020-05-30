@@ -25,6 +25,78 @@ double densityCoefficient(int strength)
 		return 1.4;
 }
 
+double immunityCoefficient(double deadAll, double infectedAll, double recoveredAll, int population)
+{
+	return 1 - ((infectedAll + recoveredAll) / (population - deadAll));
+}
+
+double powerFactor(double infectionAll,double powerCoeficient, string nameVirus, string nameCity)
+{
+	if (infectionAll > 10 && infectionAll < 50)
+	{
+		if(powerCoeficient>0.95)
+		cout << "СМИ начали обсуждать вирус! Мемы про вирус вошли в чат!" << endl;
+		if (powerCoeficient < 0.95)
+			cout << "Вирус почти отспупил!" << endl;
+		return 0.95;
+	}
+	else if (infectionAll > 50 && infectionAll < 100)
+	{
+		if (powerCoeficient > 0.9)
+		cout << "Месты власти собрались на экстренное совещание, избегайте контакта с зараженными!" << endl;
+		if (powerCoeficient < 0.9)
+			cout << "На улицах все чаще можно встретить людей!" << endl;
+		return 0.9;
+	}
+	else if (infectionAll > 100 && infectionAll < 250)
+	{
+		if (powerCoeficient > 0.8)
+		cout << "Авиасообщение закрыто, введен закон о ношения масок!" << endl;
+		if (powerCoeficient < 0.8)
+			cout << "Границы открылись для свободного перемещения!" << endl;
+		return 0.8;
+	}
+	else if (infectionAll > 250 && infectionAll < 500)
+	{
+		if (powerCoeficient > 0.7)
+		cout << "Закрываются общественные места, граждан просят оставатсья дома!" << endl;
+		if (powerCoeficient < 0.7)
+			cout << "С каждым днем все меньше и меньше новых случаев заражения!" << endl;
+		return 0.7;
+	}
+	else if (infectionAll > 500 && infectionAll < 1000)
+	{
+		if (powerCoeficient > 0.6)
+		cout << "Общее число заболевших превысило 500, вводится чрезвычайное положение!" << endl;
+		if (powerCoeficient < 0.6)
+			cout << "Вирус пошел на спад!" << endl;
+		return 0.6;
+	}
+	else if (infectionAll > 1000 && infectionAll < 5000)
+	{
+		if (powerCoeficient > 0.5)
+		cout << "Колличество больных больше 1000, больницы переполнены!" << endl;
+		if (powerCoeficient < 0.5)
+			cout << "Ученные дают благоприятный прогноз, продолжайте соблюдать меры самоизоляции!" << endl;
+		return 0.5;
+	}
+	else if (infectionAll > 5000)
+	{
+		if (powerCoeficient > 0.4)
+		cout << "Власти ввели максимальные меры безопасности" << endl;
+		if (powerCoeficient < 0.4)
+			cout << "Власти сняли меры безопасноти" << endl;
+		return 0.4;
+	}
+	else if (infectionAll > 10000)
+	{
+		if (powerCoeficient != 0.35)
+			cout << "Все граждане сидят дома в надежде на то, что вирус скоро отступит" << endl;
+		return 0.35;
+	}
+	else return 1;
+}
+
 double securityCoefficient(int securityPercentage)
 {
 	double transfer = static_cast<double>(securityPercentage) / 100;
@@ -33,10 +105,15 @@ double securityCoefficient(int securityPercentage)
 
 double vaccineScreening(int developmentTime, int thisDay)
 {
-	if (developmentTime <= thisDay)
-		return 0.2;//РёР·РѕР±СЂРµР»Рё РІР°РєС†РёРЅСѓ, РЅСѓР¶РЅРѕ СЃРёР»СЊРЅРѕ СѓРјРµРЅСЊС€РёС‚СЊ СЃРєРѕСЂРѕСЃС‚СЊ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅРµРЅРё
+	if (developmentTime < thisDay)
+		return 0.3;//изобрели вакцину, нужно сильно уменьшить скорость распространени
+	else if (developmentTime == thisDay)
+	{
+		cout << "Ученые изобрели вакцину!!!" << endl;
+		return 0.3;
+	}
 	else
-		return 1;//РІР°РєС†РёРЅС‹ РЅРµС‚, РІСЃРµ РїРѕ РїСЂРµР¶РЅРµРјСѓ
+		return 1;//вакцины нет, все по прежнему
 }
 
 int vaccineDevelopmentTime(int virusComplexity)
@@ -48,7 +125,7 @@ int vaccineDevelopmentTime(int virusComplexity)
 	case 3: return 90;
 	case 4: return 120;
 	default:
-		cout << "Р’СЂРµРјСЏ СЂР°Р·СЂР°Р±РѕС‚РєРё РІР°РєС†РёРЅС‹ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕРїСЂРµРґРµР»РµРЅРЅРѕ!!!" << endl;
+		cout << "Время разработки вакцины не может быть определенно!!!" << endl;
 		break;
 	}
 }
@@ -67,55 +144,76 @@ double medicineCoefficient(int medicineLevel)
 	case 3: return 0.9;
 	case 4: return 0.8;
 	case 5: return 0.7;
-	default: cout << "РќРµРІРѕР·РјРѕР¶РЅРѕ РѕРїСЂРµРґРµР»РёС‚СЊ СѓСЂРѕРІРµРЅСЊ РјРµРґРёС†РёРЅС‹" << endl;
+	default: cout << "Невозможно определить уровень медицины" << endl;
 		break;
 	}
 }
 
 double mortalityCoefficient(int startMortality, double medicineCoef)
 {
-	double mortalityTransfer = static_cast<double>(startMortality) / 100;//РїРµСЂРµРІРѕРґРёС‚ РёР· РїСЂРѕС†РµРЅС‚РѕРІ РІ РґСЂРѕР±СЊ
+	double mortalityTransfer = static_cast<double>(startMortality) / 100;//переводит из процентов в дробь
 	return mortalityTransfer * medicineCoef;
 }
 
-void basicCalculation(double infectionRate, int developmentTime, double mortalityCoefficient)
+void basicCalculation(double infectionRate, int developmentTime, double mortalityCoefficient, int population, int periodOfIllness, string nameVirus, string nameCity)
 {
-	cout << "Р’РІРµРґРёС‚Рµ РєРѕР»Р»РёС‡РµСЃС‚РІРѕ РґРЅРµР№ РґР»СЏ РїСЂРѕРіРЅРѕР·Р°" << endl;
-	int predictDay;//СЃРїСЂР°С€РёРІР°РµС‚ РЅР° СЃРєРѕР»СЊРєРѕ РґРЅРµР№ РЅСѓР¶РЅРѕ СЃРґРµР»Р°С‚СЊ РїСЂРѕРіРЅРѕР·
+	cout << "Введите колличество дней для прогноза" << endl;
+	int predictDay;//спрашивает на сколько дней нужно сделать прогноз
 	cin >> predictDay;
-	int* recovered = new int[predictDay];//СЃРѕР·РґР°РµРј РґРёРЅРјР°С‡РёРЅС‹Р№ РјР°СЃСЃРёРІ РґР»СЏ РІС‹Р·РґРѕСЂРѕРІРµРІС€РёС… Р»СЋРґРµР№
-	float infectedToday = 0;//СЃС‚Р°СЂС‚РѕРІРѕРµ РєРѕР»-РІРѕ Р·Р°СЂР°Р¶РµРЅРЅС‹С…
-	float deadToday=0;
-	float infectedAll=1;
-	float deadAll=0;
-	for (int today = 1; today <= predictDay; today++)//С†РёРєР» РґРѕР»Р¶РµРЅ СЂР°Р±РѕС‚Р°С‚СЊ СЃС‚РѕР»СЊРєРѕ, РЅР° СЃРєРѕР»СЊРєРѕ РґРЅРµР№ РЅСѓР¶РµРЅ РїСЂРѕРіРЅРѕР·
+	int* recovered = new int[predictDay];//создаем динмачиный массив для выздоровевших людей
+	int infectedToday;//новых случаев заражения
+	int deadToday=0;
+	int infectedAll=1;//счетчик людей которые болеют сейчас
+	int deadAll=0;//счетчик всего смертей
+	double imunoCaef;//коэф имунитета, который уменьшается, так-как люди которые уже болели не могут снова заразится
+	int recoveredAll=0;//счетчик всего выздоровевших
+	double  powerCoefficient=1;//коэфициент который уменьшается, из-за действий властей
+	int infectedAfter=1;//предыдущих случаев заражения для расчета, считаем, что болезнь проявляется на след сутки и граждане садятся на карантин и никого больше не заражают
+	int casesOfInfection=1;//случаев заражения всего
+	system("cls");
+	cout<<"В городе "<<nameCity<<" Зарегистрирован первый случай заражения вирусом "<<nameVirus<<endl;
+	for (int today = 1; today <= predictDay; today++)//цикл должен работать столько, на сколько дней нужен прогноз
 	{
-		double vacineCheck = vaccineScreening(developmentTime, today);//РєР°Р¶РґС‹Р№ СЂР°Р· РїСЂРѕРІРµСЂСЏРµРј РЅР°Р»РёС‡РёРµ РІР°РєС†РёРЅС‹
-		infectedToday = infectedAll * infectionRate * vacineCheck;
+		cout << "--------------------------------------------------------------" << endl;
+		double vacineCheck = vaccineScreening(developmentTime, today);//каждый раз проверяем наличие вакцины
+		imunoCaef = immunityCoefficient(deadAll, infectedAll, recoveredAll, population);//каждый раз смотрим число зараженных
+		powerCoefficient = powerFactor(infectedAll,powerCoefficient, nameVirus, nameCity);
+		infectedToday = infectedAfter * infectionRate * vacineCheck*imunoCaef*powerCoefficient;
 		deadToday = infectedToday * mortalityCoefficient * vacineCheck;
 		recovered[today - 1] = infectedToday - deadToday;
-		if (today > 5)
+		if (today > periodOfIllness )
 		{
-			infectedAll = infectedAll + infectedToday - deadToday-recovered[today-5];
+			infectedAll = infectedAll + infectedToday - deadToday - recovered[today - periodOfIllness + 1] - 1;
+			recoveredAll = recoveredAll + recovered[today - periodOfIllness +1];
 		}
 		else
 		{
 			infectedAll = infectedAll + infectedToday - deadToday;
 		}
 		deadAll = deadAll + deadToday;
-		/*numberOfInfected = numberOfInfected * infectionRate * vacineCheck;//РїРѕРґСЃС‡РёС‚С‹РІР°РµС‚ РєРѕР»-РІРѕ Р·Р°СЂР°Р¶РµРЅРЅС‹С… СЃРµРіРѕРґРЅСЏ
-		deadToday = numberOfInfected * mortalityCoefficient * vacineCheck;//СѓРјРµСЂС€РёС… СЃРµРіРѕРґРЅСЏ
-		deadAll =deadAll+ deadToday;
-		infectedAll = infectedAll+numberOfInfected;*/
-		cout << "Р”РµРЅСЊ " << today << endl;
-		cout << "РЎРµРіРѕРґРЅСЏ Р·Р°СЂР°Р¶РµРЅРЅС‹С…: " << static_cast<int>(infectedToday) << endl;
-		cout << "Р—Р°СЂР°Р¶РµРЅРЅС‹С… РІСЃРµРіРѕ: " << static_cast<int>(infectedAll) << endl;
-		cout << "РЎРµРіРѕРґРЅСЏ РїРѕРіРёР±Р»Рѕ: " << static_cast<int>(deadToday) << endl;
-		cout << "РџРѕРіРёР±С€РёС… РІСЃРµРіРѕ: " << static_cast<int>(deadAll) << endl;
-		if(today>5)
-		cout << "Р’С‹Р·РґРѕСЂРѕРІРµРІС€РёС… СЃРµРіРѕРґРЅСЏ: " << recovered[today-5] << endl;
-		//numberOfInfected=numberOfInfected - deadToday;
-
+		cout << "День " << today << endl;
+		cout << "Коэф имуны: " << imunoCaef << endl;
+		if (infectedToday > 0)//если прошел период болезни
+			cout << "Сегодня зараженных: " << infectedToday << endl;
+		else cout << "Сегодня нет зараженных" << endl;
+		if (infectedAll > 1)
+			cout << "Зараженных всего: " << infectedAll << endl;
+		else cout << "Все люди победили болезнь" << endl;
+		cout << "Сегодня погибло: " << deadToday << endl;
+		cout << "Погибших всего: " << deadAll << endl;
+		if(today> periodOfIllness)//прошел период болезни
+		cout << "Выздоровевших сегодня: " << recovered[today- periodOfIllness] << endl;
+		cout << "Выздоровевших всего: " << recoveredAll<<endl;
+		infectedAfter = infectedToday;
+		casesOfInfection = casesOfInfection + infectedToday;
+		cout << "Зарегистрированных случаев заражения всего: " << casesOfInfection<< endl;
+		if (today > 1 && infectedAll < 1)//если число зараженных достигло нуля, не считая первого зараженного, то вирус закончился
+		{
+			cout << "Поздравляю вирус побежден, все больные выздоровели" << endl<<endl;
+			break;
+		}
+		
 	}
-	delete[]recovered;
+	delete[] recovered;
+	recovered=nullptr;
 }
