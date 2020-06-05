@@ -5,32 +5,31 @@ using namespace std;
 class Virus
 {
 private:
-	string nameVirus;//Название вируca
-	double startInvectionRate;//Стартовая скорость заражения
-	double mortality;//Смертность
-	int periodOfIllnes;//период болезни
-	int virusComplexity;//с помощью этого пункта определяем на сколько быстро получим вакцину
+	string nameVirus;//РќР°Р·РІР°РЅРёРµ РІРёСЂСѓca
+	double startInvectionRate;//РЎС‚Р°СЂС‚РѕРІР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ Р·Р°СЂР°Р¶РµРЅРёСЏ
+	double mortality;//РЎРјРµСЂС‚РЅРѕСЃС‚СЊ
+	int periodOfIllnes;//РїРµСЂРёРѕРґ Р±РѕР»РµР·РЅРё
+	int virusComplexity;//СЃ РїРѕРјРѕС‰СЊСЋ СЌС‚РѕРіРѕ РїСѓРЅРєС‚Р° РѕРїСЂРµРґРµР»СЏРµРј РЅР° СЃРєРѕР»СЊРєРѕ Р±С‹СЃС‚СЂРѕ РїРѕР»СѓС‡РёРј РІР°РєС†РёРЅСѓ
 public:
-	//конструктор
+	//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 	Virus();
-	//сеттеры
+	//СЃРµС‚С‚РµСЂС‹
 	void setNameVirus(string name);
 	void setStartInfectionRate(double infectionRate);
 	void setMortality(double startMortality);
 	void setPeriodOfIllnes(int periodIllnes);
 	void setVirusComplextiy(int complexity);
-	//геттеры
+	//РіРµС‚С‚РµСЂС‹
 	string getNameVirus();
 	double getStartInfectionRate();
 	double getMortality();
 	int getPeriodOfillnes();
 	int getVirusComplexity();
-	//заполнение класса пользователем
+	//Р·Р°РїРѕР»РЅРµРЅРёРµ РєР»Р°СЃСЃР° РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј
 	void introduceVirus();
-	//вывод в консоль
+	//РІС‹РІРѕРґ РІ РєРѕРЅСЃРѕР»СЊ
 	void printVirus();
-	//Перегрузка операторов ввода и вывода
+	//РџРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂРѕРІ РІРІРѕРґР° Рё РІС‹РІРѕРґР°
 	friend ostream& operator << (ostream& os, Virus& virus);
 	friend istream& operator >> (istream& is, Virus& virus);
 };
-
